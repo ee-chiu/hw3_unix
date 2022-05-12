@@ -14,3 +14,13 @@ size_t strlen(const char *s){
     while(*s++) count++;
     return count;
 }
+
+unsigned int alarm(unsigned int sec){
+    long ret = sys_alarm(sec);
+    WRAPPER_RETval(unsigned);
+}
+
+int pause(void){
+    long ret = sys_pause();
+    WRAPPER_RETval(int);
+}
