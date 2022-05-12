@@ -3,10 +3,12 @@
 
 typedef long long size_t;
 typedef long long ssize_t;
+typedef unsigned long sigset_t; /* from /usr/include/x86_64-linux-gnu/asm/signal.h */
+
 
 extern long errno;
 
-#define NULL ((void*) 0)
+#define NULL    ((void*) 0)
 
 /* from /usr/include/asm-generic/errno-base.h */
 #define	EPERM		 1	/* Operation not permitted */
@@ -44,6 +46,42 @@ extern long errno;
 #define	EDOM		33	/* Math argument out of domain of func */
 #define	ERANGE		34	/* Math result not representable */
 
+/* from /usr/include/x86_64-linux-gnu/asm/signal.h */
+#define NSIG    32
+
+# define SIGHUP     1
+# define SIGINT     2
+# define SIGQUIT    3    
+# define SIGILL     4
+# define SIGTRAP    5 
+# define SIGABRT    6 
+# define SIGIOT     6 
+# define SIGBUS     7
+# define SIGFPE     8
+# define SIGKILL    9
+# define SIGUSR1    10
+# define SIGSEGV    11
+# define SIGUSR2    12
+# define SIGPIPE    13
+# define SIGALRM    14
+# define SIGTERM    15
+# define SIGSTKFLT  16
+# define SIGCHLD    17
+# define SIGCONT    18
+# define SIGSTOP    19
+# define SIGTSTP    20
+# define SIGTTIN    21
+# define SIGTTOU    22
+# define SIGURG     23
+# define SIGXCPU    24
+# define SIGXFSZ    25
+# define SIGVTALRM  26
+# define SIGPROF    27
+# define SIGWINCH   28
+# define SIGIO      29
+# define SIGPWR     30
+# define SIGSYS     31
+
 struct timespec {
     long tv_sec;    /* seconds */
     long tv_nsec;   /* nanoseconds */
@@ -60,6 +98,7 @@ ssize_t write(int fd, const void *buf, size_t count);
 size_t strlen(const char *s);
 unsigned int alarm(unsigned int sec);
 int pause(void);
-
 unsigned int sleep(unsigned int sec);
+int sigaddset(sigset_t *set, int sig);
+int sigemptyset(sigset_t *set);
 #endif

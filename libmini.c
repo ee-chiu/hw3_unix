@@ -37,3 +37,23 @@ unsigned int sleep(unsigned int sec){
     } 
     return 0;
 }
+
+int sigemptyset(sigset_t *set){
+    if (set == NULL){
+        errno = EINVAL;
+        return -1;
+    }
+    memset(set, 0, sizeof(sigset_t));
+    return 0;
+}
+
+int sigaddset(sigset_t *set, int sig){
+    if (set == NULL || sig <= 0 || sig >= NSIG) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    sigset_t addsig = ( 1 << (sig - 1) );
+    *set = *set & addsig;
+    return 0;
+}
