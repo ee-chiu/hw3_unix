@@ -103,13 +103,14 @@ struct sigaction {
     sigset_t    sa_mask;
     int     sa_flags;
     void    (*sa_restorer)(void);
-}
+};
 
 /* system calls */
 long sys_write(int fd, const void *buf, size_t count);
 long sys_alarm(unsigned int sec);
 long sys_pause(void);
 long sys_nanosleep(struct timespec *rqtp, struct timespec *rmtp);
+long sys_rt_sigaction(int sig, const struct sigaction *act, struct sigaction *oldact, size_t sigsetsize);
 
 /* wrappers */
 ssize_t write(int fd, const void *buf, size_t count);
@@ -117,6 +118,7 @@ size_t strlen(const char *s);
 unsigned int alarm(unsigned int sec);
 int pause(void);
 unsigned int sleep(unsigned int sec);
+int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
 int sigaddset(sigset_t *set, int sig);
 int sigemptyset(sigset_t *set);
 #endif

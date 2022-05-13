@@ -16,6 +16,7 @@ extern errno
     section .text
 
     gensys 1, write
+    gensys 13, rt_sigaction
     gensys 34, pause
     gensys 35, nanosleep
     gensys 37, alarm

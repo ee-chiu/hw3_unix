@@ -38,6 +38,16 @@ unsigned int sleep(unsigned int sec){
     return 0;
 }
 
+int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact){
+    if (act == NULL || oldact == 0 || sig <= 0 || sig >= NSIG || sig == SIGSTOP || sig == SIGKILL) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    long ret = sys_rt_sigaction(sig, act, oldact, sizeof(sigset_t));
+    WRAPPER_RETval(int);
+}
+
 int sigemptyset(sigset_t *set){
     if (set == NULL){
         errno = EINVAL;
