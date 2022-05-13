@@ -126,4 +126,6 @@ int sigemptyset(sigset_t *set);
 int sigpending(sigset_t *set);
 int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
 
+void perror(const char *prefix);
+
 #endif

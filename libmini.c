@@ -88,3 +88,7 @@ int sigprocmask(int how, const sigset_t *set, sigset_t *oldset){
     sys_rt_sigprocmask(how, set, oldset, sizeof(sigset_t));
     return 0;
 }
+
+void perror(const char *prefix){
+    return;
+}
