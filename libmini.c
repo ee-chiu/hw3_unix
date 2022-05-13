@@ -48,6 +48,16 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact){
     WRAPPER_RETval(int);
 }
 
+int sigismember(const sigset_t *set, int sig){
+    if (set == NULL || sig <= 0 || sig >= NSIG) {
+        errno = EINVAL;
+        return 0;
+    }
+
+    sigset_t checksig = ( 1 << (sig - 1) );
+    return *set & checksig;
+}
+
 int sigaddset(sigset_t *set, int sig){
     if (set == NULL || sig <= 0 || sig >= NSIG) {
         errno = EINVAL;

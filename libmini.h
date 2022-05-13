@@ -121,6 +121,7 @@ unsigned int alarm(unsigned int sec);
 int pause(void);
 unsigned int sleep(unsigned int sec);
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
+int sigismember(const sigset_t *set, int sig);
 int sigaddset(sigset_t *set, int sig);
 int sigemptyset(sigset_t *set);
 int sigpending(sigset_t *set);
