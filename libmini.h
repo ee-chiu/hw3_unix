@@ -97,20 +97,20 @@ struct timespec {
 };
 
 /* slide 10-signals p.41 */
-struct sigaction {
+/*struct sigaction {
     void    (*sa_handler)(int);
     void    (*sa_sigaction)(int, siginfo_t *, void *);
     sigset_t    sa_mask;
     int     sa_flags;
     void    (*sa_restorer)(void);
-};
+};*/
 
 /* system calls */
 long sys_write(int fd, const void *buf, size_t count);
 long sys_alarm(unsigned int sec);
 long sys_pause(void);
 long sys_nanosleep(struct timespec *rqtp, struct timespec *rmtp);
-long sys_rt_sigaction(int sig, const struct sigaction *act, struct sigaction *oldact, size_t sigsetsize);
+//long sys_rt_sigaction(int sig, const struct sigaction *act, struct sigaction *oldact, size_t sigsetsize);
 long sys_rt_sigpending(sigset_t *set, size_t sigsetsize);
 long sys_rt_sigprocmask(int how, const sigset_t *set, sigset_t *oldset, size_t sigsetsize);
 
@@ -120,7 +120,7 @@ size_t strlen(const char *s);
 unsigned int alarm(unsigned int sec);
 int pause(void);
 unsigned int sleep(unsigned int sec);
-int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
+//int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
 int sigismember(const sigset_t *set, int sig);
 int sigaddset(sigset_t *set, int sig);
 int sigemptyset(sigset_t *set);
