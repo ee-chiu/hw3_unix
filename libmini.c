@@ -48,15 +48,6 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact){
     WRAPPER_RETval(int);
 }
 
-int sigemptyset(sigset_t *set){
-    if (set == NULL){
-        errno = EINVAL;
-        return -1;
-    }
-    memset(set, 0, sizeof(sigset_t));
-    return 0;
-}
-
 int sigaddset(sigset_t *set, int sig){
     if (set == NULL || sig <= 0 || sig >= NSIG) {
         errno = EINVAL;
@@ -65,5 +56,25 @@ int sigaddset(sigset_t *set, int sig){
 
     sigset_t addsig = ( 1 << (sig - 1) );
     *set = *set & addsig;
+    return 0;
+}
+
+int sigemptyset(sigset_t *set){
+    if (set == NULL){
+        errno = EINVAL;
+        return -1;
+    }
+
+    memset(set, 0, sizeof(sigset_t));
+    return 0;
+}
+
+int sigprocmask(int how, const sigset_t *set, sigset_t *oldset){
+    if(set == NULL || oldset == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    sys_rt_sigprocmask(how, set, oldset, sizeof(sigset_t));
     return 0;
 }
