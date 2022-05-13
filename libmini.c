@@ -38,15 +38,15 @@ unsigned int sleep(unsigned int sec){
     return 0;
 }
 
-/*int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact){
-    if (act == NULL || oldact == 0 || sig <= 0 || sig >= NSIG || sig == SIGSTOP || sig == SIGKILL) {
+int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact){
+    if (sig <= 0 || sig >= NSIG || sig == SIGSTOP || sig == SIGKILL) {
         errno = EINVAL;
         return -1;
     }
 
     long ret = sys_rt_sigaction(sig, act, oldact, sizeof(sigset_t));
     WRAPPER_RETval(int);
-}*/
+}
 
 int sigismember(const sigset_t *set, int sig){
     if (set == NULL || sig <= 0 || sig >= NSIG) {
@@ -99,6 +99,29 @@ int sigprocmask(int how, const sigset_t *set, sigset_t *oldset){
 
     long ret = sys_rt_sigprocmask(how, set, oldset, sizeof(sigset_t));
     WRAPPER_RETval(int);
+}
+
+sighandler_t signal(int sig, sighandler_t handler){
+    if(sig <= 0 || sig >= NSIG) {
+        errno = EINVAL;
+        return SIG_ERR; 
+    }
+    struct sigaction act, oldact;
+    act.sa_handler = handler;
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0;
+    if (sig == SIGALRM) {
+#ifdef SA_INTERRUPT
+        act.sa_flags |= SA_INTERRUPT;
+#endif
+    }
+    else {
+#ifdef SA_RESTART
+        act.sa_flags |= SA_RESTART;
+#endif
+    } 
+    if (sigaction(sig, &act, &oldact) < 0) return SIG_ERR;
+    return oldact.sa_handler;      
 }
 
 static const char *errmsg[] = {
