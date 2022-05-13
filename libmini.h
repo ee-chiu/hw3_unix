@@ -4,7 +4,7 @@
 typedef long long size_t;
 typedef long long ssize_t;
 typedef unsigned long sigset_t; /* from /usr/include/x86_64-linux-gnu/asm/signal.h */
-
+typedef char* sighandler_t; /* from https://elixir.bootlin.com/linux/v4.16.8/source/arch/parisc/include/uapi/asm/signal.h#L94 line 94 */
 
 extern long errno;
 
@@ -49,43 +49,61 @@ extern long errno;
 /* from /usr/include/x86_64-linux-gnu/asm/signal.h */
 #define NSIG    32
 
-# define SIGHUP     1
-# define SIGINT     2
-# define SIGQUIT    3    
-# define SIGILL     4
-# define SIGTRAP    5 
-# define SIGABRT    6 
-# define SIGIOT     6 
-# define SIGBUS     7
-# define SIGFPE     8
-# define SIGKILL    9
-# define SIGUSR1    10
-# define SIGSEGV    11
-# define SIGUSR2    12
-# define SIGPIPE    13
-# define SIGALRM    14
-# define SIGTERM    15
-# define SIGSTKFLT  16
-# define SIGCHLD    17
-# define SIGCONT    18
-# define SIGSTOP    19
-# define SIGTSTP    20
-# define SIGTTIN    21
-# define SIGTTOU    22
-# define SIGURG     23
-# define SIGXCPU    24
-# define SIGXFSZ    25
-# define SIGVTALRM  26
-# define SIGPROF    27
-# define SIGWINCH   28
-# define SIGIO      29
-# define SIGPWR     30
-# define SIGSYS     31
+#define SIGHUP     1
+#define SIGINT     2
+#define SIGQUIT    3    
+#define SIGILL     4
+#define SIGTRAP    5 
+#define SIGABRT    6 
+#define SIGIOT     6 
+#define SIGBUS     7
+#define SIGFPE     8
+#define SIGKILL    9
+#define SIGUSR1    10
+#define SIGSEGV    11
+#define SIGUSR2    12
+#define SIGPIPE    13
+#define SIGALRM    14
+#define SIGTERM    15
+#define SIGSTKFLT  16
+#define SIGCHLD    17
+#define SIGCONT    18
+#define SIGSTOP    19
+#define SIGTSTP    20
+#define SIGTTIN    21
+#define SIGTTOU    22
+#define SIGURG     23
+#define SIGXCPU    24
+#define SIGXFSZ    25
+#define SIGVTALRM  26
+#define SIGPROF    27
+#define SIGWINCH   28
+#define SIGIO      29
+#define SIGPWR     30
+#define SIGSYS     31
 
+/* from https://elixir.bootlin.com/linux/v4.16.8/source/arch/parisc/include/uapi/asm/signal.h#L79 */
+#define SIG_BLOCK   0
+#define SIG_UNBLOCK 1
+#define SIG_SETMASK 2
+#define SIG_DFL     ((sighandler_t)0)
+#define SIG_IGN     ((sighandler_t)1)
+#define SIG_ERR     ((sighandler_t)-1)
+
+/* from libmini.h in sample code */
 struct timespec {
     long tv_sec;    /* seconds */
     long tv_nsec;   /* nanoseconds */
 };
+
+/* slide 10-signals p.41 */
+struct sigaction {
+    void    (*sa_handler)(int);
+    void    (*sa_sigaction)(int, siginfo_t *, void *);
+    sigset_t    sa_mask;
+    int     sa_flags;
+    void    (*sa_restorer)(void);
+}
 
 /* system calls */
 long sys_write(int fd, const void *buf, size_t count);
