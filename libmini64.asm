@@ -22,3 +22,4 @@ extern errno
     gensys 35, nanosleep
     gensys 37, alarm
     gensys 60, exit
+    gensys 127, rt_sigpending

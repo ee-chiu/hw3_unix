@@ -111,6 +111,7 @@ long sys_alarm(unsigned int sec);
 long sys_pause(void);
 long sys_nanosleep(struct timespec *rqtp, struct timespec *rmtp);
 long sys_rt_sigaction(int sig, const struct sigaction *act, struct sigaction *oldact, size_t sigsetsize);
+long sys_rt_sigpending(sigset_t *set, size_t sigsetsize);
 long sys_rt_sigprocmask(int how, const sigset_t *set, sigset_t *oldset, size_t sigsetsize);
 
 /* wrappers */
@@ -122,6 +123,7 @@ unsigned int sleep(unsigned int sec);
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
 int sigaddset(sigset_t *set, int sig);
 int sigemptyset(sigset_t *set);
+int sigpending(sigset_t *set);
 int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
 
 #endif

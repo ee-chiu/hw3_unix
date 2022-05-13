@@ -69,6 +69,16 @@ int sigemptyset(sigset_t *set){
     return 0;
 }
 
+int sigpending(sigset_t *set){
+    if(set == NULL){
+        errno = EINVAL;
+        return -1;
+    }
+
+    sys_rt_sigpending(set, sizeof(sigset_t));
+    return 0;
+}
+
 int sigprocmask(int how, const sigset_t *set, sigset_t *oldset){
     if(set == NULL || oldset == NULL) {
         errno = EINVAL;
