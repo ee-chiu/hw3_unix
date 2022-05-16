@@ -71,6 +71,12 @@ int sigaddset(sigset_t *set, int sig){
     return 0;
 }
 
+int sigdelset (sigset_t *set, int sig){
+    sigset_t delsig = ( 1 << (sig-1) );
+    *set = *set & (~delsig);
+    return 0;
+}
+
 int sigemptyset(sigset_t *set){
     if (set == NULL){
         errno = EINVAL;
@@ -78,6 +84,15 @@ int sigemptyset(sigset_t *set){
     }
 
     *set = 0;
+    return 0;
+}
+
+int sigfillset(sigset_t *set){
+    sigset_t addsig = 1;
+    for(int i = 1; i <= 31; i++){
+        *set |= addsig;
+        addsig = addsig << 1;
+    }
     return 0;
 }
 
