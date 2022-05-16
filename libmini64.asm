@@ -18,6 +18,7 @@ extern errno
     gensys 1, write
     gensys 13, rt_sigaction
     gensys 14, rt_sigprocmask
+    gensys 15, rt_sigreturn
     gensys 34, pause
     gensys 35, nanosleep
     gensys 37, alarm

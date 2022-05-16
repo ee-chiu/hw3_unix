@@ -38,12 +38,14 @@ unsigned int sleep(unsigned int sec){
     return 0;
 }
 
-int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact){
+int sigaction(int sig, struct sigaction *act, struct sigaction *oldact){
     if (sig <= 0 || sig >= NSIG || sig == SIGSTOP || sig == SIGKILL) {
         errno = EINVAL;
         return -1;
     }
 
+    act->sa_flags |= SA_RESTORER;
+    act->sa_restorer = sys_rt_sigreturn;
     long ret = sys_rt_sigaction(sig, act, oldact, sizeof(sigset_t));
     WRAPPER_RETval(int);
 }
@@ -109,7 +111,9 @@ sighandler_t signal(int sig, sighandler_t handler){
     struct sigaction act, oldact;
     act.sa_handler = handler;
     sigemptyset(&act.sa_mask);
+    sigaddset(&act.sa_mask, sig);
     act.sa_flags = 0;
+    act.sa_restorer = NULL;
     if (sig == SIGALRM) {
 #ifdef SA_INTERRUPT
         act.sa_flags |= SA_INTERRUPT;

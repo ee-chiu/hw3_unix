@@ -86,6 +86,8 @@ extern long errno;
 #define SIGPWR     30
 #define SIGSYS     31
 
+#define SA_RESTORER 0x04000000
+
 /* from https://elixir.bootlin.com/linux/v4.16.8/source/arch/parisc/include/uapi/asm/signal.h#L79 */
 #define SIG_BLOCK   0
 #define SIG_UNBLOCK 1
@@ -162,6 +164,7 @@ long sys_nanosleep(struct timespec *rqtp, struct timespec *rmtp);
 long sys_rt_sigaction(int sig, const struct sigaction *act, struct sigaction *oldact, size_t sigsetsize);
 long sys_rt_sigpending(sigset_t *set, size_t sigsetsize);
 long sys_rt_sigprocmask(int how, const sigset_t *set, sigset_t *oldset, size_t sigsetsize);
+void sys_rt_sigreturn();
 
 /* wrappers */
 ssize_t write(int fd, const void *buf, size_t count);
@@ -169,7 +172,7 @@ size_t strlen(const char *s);
 unsigned int alarm(unsigned int sec);
 int pause(void);
 unsigned int sleep(unsigned int sec);
-int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
+int sigaction(int sig, struct sigaction *act, struct sigaction *oldact);
 int sigismember(const sigset_t *set, int sig);
 int sigaddset(sigset_t *set, int sig);
 int sigemptyset(sigset_t *set);
