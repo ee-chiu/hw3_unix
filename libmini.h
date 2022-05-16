@@ -156,6 +156,11 @@ struct sigaction {
     void    (*sa_restorer)(void);
 };
 
+typedef struct jmp_buf_s {
+	long long reg[8];
+	sigset_t mask;
+} jmp_buf[1];
+
 /* system calls */
 long sys_write(int fd, const void *buf, size_t count);
 long sys_alarm(unsigned int sec);
@@ -166,6 +171,8 @@ long sys_rt_sigaction(int sig, const struct sigaction *act, struct sigaction *ol
 long sys_rt_sigpending(sigset_t *set, size_t sigsetsize);
 long sys_rt_sigprocmask(int how, const sigset_t *set, sigset_t *oldset, size_t sigsetsize);
 void sys_rt_sigreturn();
+int setjmp(jmp_buf jb);
+void longjmp(jmp_buf jb, int val);
 
 /* wrappers */
 ssize_t write(int fd, const void *buf, size_t count);

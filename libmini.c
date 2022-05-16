@@ -39,8 +39,7 @@ unsigned int sleep(unsigned int sec){
 }
 
 void exit(int error_code){
-    long ret = sys_exit(error_code);
-    WRAPPER_RETval(int);
+    sys_exit(error_code);
 }
 
 int sigaction(int sig, struct sigaction *act, struct sigaction *oldact){
