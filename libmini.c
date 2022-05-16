@@ -38,6 +38,11 @@ unsigned int sleep(unsigned int sec){
     return 0;
 }
 
+void exit(int error_code){
+    long ret = sys_exit(error_code);
+    WRAPPER_RETval(int);
+}
+
 int sigaction(int sig, struct sigaction *act, struct sigaction *oldact){
     if (sig <= 0 || sig >= NSIG || sig == SIGSTOP || sig == SIGKILL) {
         errno = EINVAL;
