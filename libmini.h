@@ -190,6 +190,8 @@ int sigfillset(sigset_t *set);
 int sigpending(sigset_t *set);
 int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
 sighandler_t signal(int sig, sighandler_t handler);
+int getsigmask(sigset_t *set);
+int setsigmask(sigset_t *set);
 
 void perror(const char *prefix);
 

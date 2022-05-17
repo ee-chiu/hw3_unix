@@ -111,13 +111,6 @@ int sigpending(sigset_t *set){
 }
 
 int sigprocmask(int how, const sigset_t *set, sigset_t *oldset){
-    if(set == NULL) {
-        errno = EINVAL;
-        return -1;
-    }
-
-    if(oldset != NULL)  *oldset = *set;
-
     long ret = sys_rt_sigprocmask(how, set, oldset, sizeof(sigset_t));
     WRAPPER_RETval(int);
 }
@@ -145,6 +138,16 @@ sighandler_t signal(int sig, sighandler_t handler){
     } 
     if (sigaction(sig, &act, &oldact) < 0) return SIG_ERR;
     return oldact.sa_handler;      
+}
+
+int getsigmask(sigset_t *set){
+    long ret = sigprocmask(0, NULL, set);
+    WRAPPER_RETval(int);
+}
+
+int setsigmask(sigset_t *set){
+    long ret = sigprocmask(SIG_SETMASK, set, NULL);
+    WRAPPER_RETval(int);
 }
 
 static const char *errmsg[] = {

@@ -24,6 +24,8 @@ extern errno
     gensys 60, exit
     gensys 127, rt_sigpending
 
+extern getsigmask
+    
     global setjmp:function
 setjmp:
     lea rax, [rdi] ; rax = &jb
@@ -38,8 +40,13 @@ setjmp:
     push rcx ; push return addr back
     mov [rax], rbx ; reg[0] = rbx
 
+    lea rdi, [rax+64] ; rdi = &jb.mask 
+    call getsigmask WRT ..plt ; getsigmask(&jb.mask)
+
     xor rax, rax ; return 0
     ret 
+
+extern setsigmask
 
     global longjmp:function
 longjmp:
@@ -54,5 +61,9 @@ longjmp:
     mov rcx, [rax+56] ; get saved return addr
     push rcx ; push new return addr back
     mov rbx, [rax] ; rbx = reg[0]
+
+    lea rdi, [rax+64] ; rdi = &jb.mask
+    call setsigmask WRT ..plt ; setsigmask(&jb.mask)
+
     mov rax, rsi ; return val
     ret
