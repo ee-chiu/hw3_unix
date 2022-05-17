@@ -91,26 +91,10 @@ int sigprocmask(int how, const sigset_t *set, sigset_t *oldset){
 }
 
 sighandler_t signal(int sig, sighandler_t handler){
-    if(sig <= 0 || sig >= NSIG) {
-        errno = EINVAL;
-        return SIG_ERR; 
-    }
     struct sigaction act, oldact;
     act.sa_handler = handler;
-    sigemptyset(&act.sa_mask);
-    sigaddset(&act.sa_mask, sig);
     act.sa_flags = 0;
-    act.sa_restorer = NULL;
-    if (sig == SIGALRM) {
-#ifdef SA_INTERRUPT
-        act.sa_flags |= SA_INTERRUPT;
-#endif
-    }
-    else {
-#ifdef SA_RESTART
-        act.sa_flags |= SA_RESTART;
-#endif
-    } 
+    sigemptyset(&act.sa_mask);
     if (sigaction(sig, &act, &oldact) < 0) return SIG_ERR;
     return oldact.sa_handler;      
 }
