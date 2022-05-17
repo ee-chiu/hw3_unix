@@ -43,11 +43,6 @@ void exit(int error_code){
 }
 
 int sigaction(int sig, struct sigaction *act, struct sigaction *oldact){
-    if (sig <= 0 || sig >= NSIG || sig == SIGSTOP || sig == SIGKILL) {
-        errno = EINVAL;
-        return -1;
-    }
-
     act->sa_flags |= SA_RESTORER;
     act->sa_restorer = sys_rt_sigreturn;
     long ret = sys_rt_sigaction(sig, act, oldact, sizeof(sigset_t));
@@ -55,21 +50,11 @@ int sigaction(int sig, struct sigaction *act, struct sigaction *oldact){
 }
 
 int sigismember(const sigset_t *set, int sig){
-    if (set == NULL || sig <= 0 || sig >= NSIG) {
-        errno = EINVAL;
-        return 0;
-    }
-
     sigset_t checksig = ( 1 << (sig - 1) );
     return *set & checksig;
 }
 
 int sigaddset(sigset_t *set, int sig){
-    if (set == NULL || sig <= 0 || sig >= NSIG) {
-        errno = EINVAL;
-        return -1;
-    }
-
     sigset_t addsig = ( 1 << (sig - 1) );
     *set = *set | addsig;
     return 0;
@@ -82,11 +67,6 @@ int sigdelset (sigset_t *set, int sig){
 }
 
 int sigemptyset(sigset_t *set){
-    if (set == NULL){
-        errno = EINVAL;
-        return -1;
-    }
-
     *set = 0;
     return 0;
 }
@@ -101,11 +81,6 @@ int sigfillset(sigset_t *set){
 }
 
 int sigpending(sigset_t *set){
-    if(set == NULL){
-        errno = EINVAL;
-        return -1;
-    }
-
     long ret = sys_rt_sigpending(set, sizeof(sigset_t));
     WRAPPER_RETval(int);
 }
